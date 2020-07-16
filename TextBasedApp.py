@@ -45,33 +45,33 @@ while option != 0:
 
     # print all task due today if none notifies user
     if option == 1:
-        ui_rows = session.query(db.Table).filter(db.Table.deadline == today.date()).all()  # get rows with today's date
+        rows = session.query(db.Table).filter(db.Table.deadline == today.date()).all()  # get rows with today's date
 
         print("Today {} :".format(datetime.strftime(today, '%d %b')))
-        print_tasks(ui_rows, False, True)  # rows, is date visible, is desc visible
+        print_tasks(rows, False, True)  # rows, is date visible, is desc visible
 
     # print all tasks due in the next week ([0,7] days)
     elif option == 2:
         next_week_date = today + timedelta(days=7)
 
-        ui_rows = session.query(db.Table).filter(db.Table.deadline.between(today.date(), next_week_date.date())).all()
+        rows = session.query(db.Table).filter(db.Table.deadline.between(today.date(), next_week_date.date())).all()
 
         print("{}:".format(datetime.strftime(next_week_date, '%A %d %b')))
-        print_tasks(ui_rows, True, True)  # rows, is date visible, is desc visible
+        print_tasks(rows, True, True)  # rows, is date visible, is desc visible
 
     # print all tasks saved
     elif option == 3:
-        ui_rows = session.query(db.Table).all()  # get all rows from table
+        rows = session.query(db.Table).all()  # get all rows from table
 
         print("All tasks:")
-        print_tasks(ui_rows, True, True)  # rows, is date visible, is desc visible
+        print_tasks(rows, True, True)  # rows, is date visible, is desc visible
 
     # print all tasks past the deadline
     elif option == 4:
-        ui_rows = session.query(db.Table).filter(db.Table.deadline < today.date()).all()
+        rows = session.query(db.Table).filter(db.Table.deadline < today.date()).all()
 
         print("Missed tasks:")
-        print_tasks(ui_rows, True, True)  # rows, is date visible, is desc visible
+        print_tasks(rows, True, True)  # rows, is date visible, is desc visible
 
     # asks users for task description and deadline and adds&commits to database
     elif option == 5:
@@ -83,16 +83,17 @@ while option != 0:
 
         session.add(new_row)
         session.commit()
+
     # asks users for tasks to be deleted and deletes&commits to database
     elif option == 6:
-        ui_rows = session.query(db.Table).order_by(db.Table.deadline).all()  # get all rows from table ordered by date
+        rows = session.query(db.Table).order_by(db.Table.deadline).all()  # get all rows from table ordered by date
 
         print('Chose the number of the task you want to delete:')
-        print_tasks(ui_rows, True, True)  # rows, is date visible, is desc visible
+        print_tasks(rows, True, True)  # rows, is date visible, is desc visible
 
         # get row index (1-based) and then delete from table (0-based)
         deleted_row_index = int(input())
-        session.delete(ui_rows[deleted_row_index - 1])
+        session.delete(rows[deleted_row_index - 1])
         session.commit()
 
     # termination condition
