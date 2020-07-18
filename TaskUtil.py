@@ -12,7 +12,6 @@ def get_list(rows):
     for i in range(0, len(rows)):
         task_list.append([i, rows[i].task, rows[i].deadline])
 
-    print(task_list)
     return task_list
 
 
