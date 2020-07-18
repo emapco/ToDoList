@@ -2,5 +2,5 @@
 Text-based to-do-list program with database functionality (SQLAlchemy, SQLite database)
 
 Adding GUI functionality to program (Tkinter)
-	-added: add task, get query results based on user input
-	-left: delete task button functionality, update ui with task info, add buttons and functionality to navigate through pages of tasks
+
+    -left: delete task button functionality, navagation buttons and functionality to navigate through pages of tasks, add popup windows for add task confirmation/errors
