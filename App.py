@@ -2,7 +2,6 @@ from datetime import datetime
 
 from tkinter import *
 from tkinter import ttk
-from typing import Dict, List
 
 from DBTool import create_engine_session
 import TaskUtil
