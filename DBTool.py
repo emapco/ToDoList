@@ -26,7 +26,7 @@ def create_engine_session():
     engine = create_engine('sqlite:///{0}?check_same_thread=False' .format(db_file_name))
     declarative_base().metadata.create_all(engine)  # create db based on engine db file
 
-    Table.__table__.create(bind=engine, checkfirst=True)
+    Table.__table__.create(bind=engine, checkfirst=True)  # checks if table exists, if not creates it; crashes otherwise
 
     Session = sessionmaker(bind=engine)  # create db session based on engine connection source
 

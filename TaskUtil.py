@@ -12,15 +12,16 @@ def get_list(rows):
     for i in range(0, len(rows)):
         task_list.append([i, rows[i].task, rows[i].deadline])
 
-    return task_list
+    return task_list, rows
 
 
 # gets tasks based on option specified
 def get_tasks(session, option):
-    # gets task due today if none notifies user
+    # gets task due today
     if option == 1:
-        rows = session.query(db.Table).filter(db.Table.deadline == today.date()).all()  # get rows with today's date
-        return get_list(rows)  # rows, is date visible, is desc visible
+        # get rows (query result) with today's date
+        rows = session.query(db.Table).filter(db.Table.deadline == today.date()).all()
+        return get_list(rows)
 
     # gets tasks due in the next week ([0,7] days)
     elif option == 2:
@@ -49,9 +50,7 @@ def add_task(session, task_desc, task_date):
 
 
 # Delete task and commits to db
-def delete_task(session, index):
-    rows = session.query(db.Table).order_by(db.Table.deadline).all()  # get all rows from table ordered by date
-
-    # get row index (1-based) and then delete from table (0-based)
-    session.delete(rows[int(index)])
+def delete_task(session, rows, index):
+    print(index)
+    session.delete(rows[index])
     session.commit()
