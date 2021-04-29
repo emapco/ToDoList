@@ -102,9 +102,6 @@ class UI:
                     self.task_rows_dict[current_row].desc.set("")
                     self.task_rows_dict[current_row].date.set("")
                 else:
-                    print(self.tasks[current_row - 2].task)
-                    print(self.tasks[current_row - 2].deadline)
-                    print(type(self.tasks[current_row-2]))
                     self.task_rows_dict[current_row].desc.set(self.tasks[current_row - 2].task)
                     self.task_rows_dict[current_row].date.set(
                         self.tasks[
