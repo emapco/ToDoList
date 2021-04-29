@@ -25,8 +25,6 @@ class UI:
 
         self.tasks = {}  # dict of Task objects
         self.task_rows_dict = {}  # dict used for ui
-        self.rows = {}  # db list of tasks; needed to update db
-
 
         root = Tk()
         root.title('To Do List')
@@ -105,19 +103,21 @@ class UI:
                     self.task_rows_dict[current_row].desc.set("")
                     self.task_rows_dict[current_row].date.set("")
                 else:
-                    print(self.tasks[current_row - 2].desc)
-                    print(self.tasks[current_row - 2].date)
-                    print(self.rows)
-                    self.task_rows_dict[current_row].desc.set(self.tasks[current_row - 2].desc)
+                    print(self.tasks[current_row - 2].task)
+                    print(self.tasks[current_row - 2].deadline)
+                    print(type(self.tasks[current_row-2]))
+                    self.task_rows_dict[current_row].desc.set(self.tasks[current_row - 2].task)
                     self.task_rows_dict[current_row].date.set(
                         self.tasks[
-                            current_row - 2].date.isoformat())  # converts datetime.date to str MMMM-MM-DD
+                            current_row - 2].deadline.isoformat())  # converts datetime.date to str MMMM-MM-DD
             except IndexError:
                 pass
 
     def display_tasks(self, opt, session):
-        self.tasks, self.rows = TaskUtil.get_tasks(session, option=opt)  # [[index, task desc str, task date str],[]]
+        self.tasks = TaskUtil.get_tasks(session, option=opt)  # [[index, task desc str, task date str],[]]
         self.update_ui_task()
 
     def delete_task(self, session, button_index):
-        TaskUtil.delete_task(session, self.rows, button_index)
+        TaskUtil.delete_task(session, self.tasks, button_index)
+
+        # TODO: add popup for invalid task as well as when task is properly deleted
