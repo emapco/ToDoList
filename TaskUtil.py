@@ -49,8 +49,14 @@ def add_task(session, task):
         pass
 
 
-# Delete task and commits to db
 def delete_task(session, rows, index):
+    """Deletes task based on which delete button was pressed
+
+    Keyword arguments:
+    session -- database session object
+    rows -- database query results
+    index -- index of task to be deleted
+    """
     try:
         session.delete(rows[index])
         session.commit()

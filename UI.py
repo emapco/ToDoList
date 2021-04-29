@@ -7,12 +7,11 @@ from Task import Task
 
 def add_task(session, task):
     try:
-        print("add_task: {}".format(task))
         TaskUtil.add_task(session, task)
 
-        # add popup confirmation screen and set fields to '' after adding
+        # TODO: add popup confirmation screen and set fields to '' after adding
     except ValueError:
-        # add popup error screen (for date formatting issues)
+        # TODO: add popup error screen (for date formatting issues)
         pass
     pass
 
@@ -21,7 +20,7 @@ class UI:
     def __init__(self, session):
         self.ui_columns = 4
         self.ui_rows = 10
-        self.start_row_index = 2
+        self.start_row_index = 2  # tracks which row task info is started to be populated
 
         self.tasks = {}  # dict of Task objects
         self.task_rows_dict = {}  # dict used for ui
