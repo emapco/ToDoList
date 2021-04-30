@@ -9,6 +9,7 @@ Adding GUI functionality to program (Tkinter)
             * populate UI with task info
             * delete task functionality
             * navigation buttons and functionality to navigate through pages of tasks 
+            * popup message boxes
             
     planned updates:   
-            * popup windows for adding new task confirmation and invalid date error
+            * UI elements for current page of results displayed and total number of tasks query returned
