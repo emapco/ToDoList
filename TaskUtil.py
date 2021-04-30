@@ -2,16 +2,17 @@ from datetime import datetime, timedelta
 
 import DBTool as db
 
+SUCCESS = 1
+ERROR = -1
 today = datetime.today()
 next_week_date = today + timedelta(days=7)
 
 
-# gets tasks based on option specified
 def get_tasks(session, option):
     """Queries the database with appropriate SELECT statement
     depending on user inputted option.
 
-    Keyword arguments:
+    Arguments:
     session -- database session object
     option -- type of request
     """
@@ -27,11 +28,10 @@ def get_tasks(session, option):
     return rows
 
 
-# Add task and commits to db
 def add_task(session, task):
     """Saves user inputted task to database
 
-    Keyword arguments:
+    Arguments:
     session -- database session object
     task -- task object to be added to database
     """
@@ -44,15 +44,15 @@ def add_task(session, task):
         session.add(new_row)
         session.commit()
 
+        return SUCCESS
     except ValueError:
-        print("Invalid date")
-        pass
+        return ERROR
 
 
 def delete_task(session, rows, index):
     """Deletes task based on which delete button was pressed
 
-    Keyword arguments:
+    Arguments:
     session -- database session object
     rows -- database query results
     index -- index of task to be deleted
@@ -60,5 +60,7 @@ def delete_task(session, rows, index):
     try:
         session.delete(rows[index])
         session.commit()
+
+        return SUCCESS
     except IndexError:
-        print('No task')
+        return ERROR
