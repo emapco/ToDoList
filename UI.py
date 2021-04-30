@@ -13,12 +13,15 @@ NUM_OF_TASK_ROWS = 8
 def add_task(session, task):
     try:
         TaskUtil.add_task(session, task)
-
         # TODO: add popup confirmation screen and set fields to '' after adding
     except ValueError:
         # TODO: add popup error screen (for date formatting issues)
         pass
     pass
+
+
+def get_scaled_task_index(task_page, row_index):
+    return (task_page - 1) * NUM_OF_TASK_ROWS + row_index
 
 
 class UI:
@@ -104,8 +107,9 @@ class UI:
                 # checks if tasks[current_row_local] is empty
                 # if so set all following task row labels to '', else populate with task info
                 # TODO: Add comments to explain the scaled values;
-                scaled_task_index = ((self.task_page - 1) * NUM_OF_TASK_ROWS + current_row) - START_ROW_INDEX
-                scaled_ui_row = ((self.task_page - 1) * UI_ROWS) + current_row
+                # get_scaled_task_index subtracted by START_ROW_INDEX since range starts on START_ROW_INDEX
+                scaled_task_index = get_scaled_task_index(self.task_page, current_row) - START_ROW_INDEX
+                scaled_ui_row = (self.task_page - 1) * UI_ROWS + current_row
                 if scaled_ui_row >= len(self.tasks) + self.task_page * 2:
                     self.task_ui_stringvar_dict[current_row].desc.set("")
                     self.task_ui_stringvar_dict[current_row].date.set("")
@@ -123,8 +127,7 @@ class UI:
         self.update_ui_task()
 
     def delete_task(self, session, button_index):
-        TaskUtil.delete_task(session, self.tasks, button_index)
-
+        TaskUtil.delete_task(session, self.tasks, get_scaled_task_index(self.task_page, button_index))
         # TODO: add popup for invalid task as well as when task is properly deleted
 
     def update_page(self, next_page=True):
