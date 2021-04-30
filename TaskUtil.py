@@ -45,7 +45,7 @@ def add_task(session, task):
         session.commit()
 
     except ValueError:
-        print("Error with new task")
+        print("Invalid date")
         pass
 
 
