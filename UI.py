@@ -23,11 +23,9 @@ def add_task(session, task):
 
 class UI:
     def __init__(self, session):
-        # tracks which row task info is started to be populated in
-        self.page = 1  # current page of results that is being displayed
-
-        self.tasks = {}  # dict of Task objects
-        self.task_rows_dict = {}  # dict used for ui
+        self.task_page = 1
+        self.tasks = {}
+        self.task_ui_stringvar_dict = {}
 
         root = Tk()
         root.title('To Do List')
@@ -56,13 +54,13 @@ class UI:
         # generates all task row ui objects and label StringVar values (assigned to ui objects)
         ui_task_rows = {}  # {row int : task object}
         for current_row in range(START_ROW_INDEX, UI_ROWS):
-            self.task_rows_dict[current_row] = Task(StringVar(), StringVar())  # current_row-2 since range starts on 2
+            self.task_ui_stringvar_dict[current_row] = Task(StringVar(), StringVar())
 
             ui_task_rows[current_row] = [
-                ttk.Label(mainframe, textvariable=self.task_rows_dict[current_row].desc).grid(column=2,
-                                                                                              row=current_row),
-                ttk.Label(mainframe, textvariable=self.task_rows_dict[current_row].date).grid(column=3,
-                                                                                              row=current_row),
+                ttk.Label(mainframe, textvariable=self.task_ui_stringvar_dict[current_row].desc).grid(column=2,
+                                                                                                      row=current_row),
+                ttk.Label(mainframe, textvariable=self.task_ui_stringvar_dict[current_row].date).grid(column=3,
+                                                                                                      row=current_row),
                 ttk.Button(mainframe, text="Del. Task",
                            command=lambda button_index=current_row - 2:
                            self.delete_task(session, button_index)).grid(column=4, row=current_row, sticky=E)
@@ -106,14 +104,14 @@ class UI:
                 # checks if tasks[current_row_local] is empty
                 # if so set all following task row labels to '', else populate with task info
                 # TODO: Add comments to explain the scaled values;
-                scaled_task_index = ((self.page - 1) * NUM_OF_TASK_ROWS + current_row) - START_ROW_INDEX
-                scaled_ui_row = ((self.page - 1) * UI_ROWS) + current_row
-                if scaled_ui_row >= len(self.tasks) + self.page * 2:
-                    self.task_rows_dict[current_row].desc.set("")
-                    self.task_rows_dict[current_row].date.set("")
+                scaled_task_index = ((self.task_page - 1) * NUM_OF_TASK_ROWS + current_row) - START_ROW_INDEX
+                scaled_ui_row = ((self.task_page - 1) * UI_ROWS) + current_row
+                if scaled_ui_row >= len(self.tasks) + self.task_page * 2:
+                    self.task_ui_stringvar_dict[current_row].desc.set("")
+                    self.task_ui_stringvar_dict[current_row].date.set("")
                 else:
-                    self.task_rows_dict[current_row].desc.set(self.tasks[scaled_task_index].task)
-                    self.task_rows_dict[current_row].date.set(
+                    self.task_ui_stringvar_dict[current_row].desc.set(self.tasks[scaled_task_index].task)
+                    self.task_ui_stringvar_dict[current_row].date.set(
                         self.tasks[
                             scaled_task_index].deadline.isoformat())  # converts datetime.date to str MMMM-MM-DD
             except IndexError:  # in case empty query is returned
@@ -121,7 +119,7 @@ class UI:
 
     def display_tasks(self, opt, session):
         self.tasks = TaskUtil.get_tasks(session, option=opt)
-        self.page = 1  # reset page for new request
+        self.task_page = 1  # reset page for new request
         self.update_ui_task()
 
     def delete_task(self, session, button_index):
@@ -131,23 +129,17 @@ class UI:
 
     def update_page(self, next_page=True):
         mod = len(self.tasks) % NUM_OF_TASK_ROWS
-        div = len(self.tasks) // 8
+        div = len(self.tasks) // NUM_OF_TASK_ROWS
 
         if next_page:  # logic for incrementing current page of info displayed
             if mod == 0:  # no remainder so the last page is fully populated
-                if self.page < div:
-                    self.page += 1
-            else:  # remainder thus last page will be partially filled thus max page > div
-                if self.page < div + 1:
-                    self.page += 1
+                if self.task_page < div:
+                    self.task_page += 1
+            else:  # remainder thus last page will be partially filled thus last page = div + 1
+                if self.task_page < div + 1:
+                    self.task_page += 1
         else:  # logic for decrementing current page of info displayed
-            if self.page > 1:
-                self.page -= 1
+            if self.task_page > 1:
+                self.task_page -= 1
 
         self.update_ui_task()
-        '''
-        print(len(self.tasks))
-        print("mod = {}".format(mod))
-        print("div = {}".format(div))
-        print(self.page)
-        '''
