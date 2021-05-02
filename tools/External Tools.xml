@@ -9,7 +9,7 @@
   <tool name="PyUIC" showInMainMenu="false" showInEditor="false" showInProject="false" showInSearchPopup="false" disabled="false" useConsole="true" showConsoleOnStdOut="false" showConsoleOnStdErr="false" synchronizeAfterRun="true">
     <exec>
       <option name="COMMAND" value="D:\ProgramData\Miniconda3\envs\ChemSimulation\Lib\site-packages\QtDesigner\uic.exe" />
-      <option name="PARAMETERS" value="-x $FileName$ -o $FileNameWithoutExtension$.py" />
+      <option name="PARAMETERS" value="-m $FileName$ -o $FileNameWithoutExtension$.py" />
       <option name="WORKING_DIRECTORY" value="$ProjectFileDir$" />
     </exec>
   </tool>
